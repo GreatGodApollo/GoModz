@@ -116,3 +116,6 @@ modules.xml
 
 # Ignore your bot configuration file
 config.json
+
+# Ignore built binaries
+bin/
