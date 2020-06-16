@@ -88,6 +88,8 @@ type CommandContext interface {
 	ReplyEmbedBuilder(EmbedBuilder) (*discordgo.Message, error)
 	ReplyFile(filename string, file io.Reader) (*discordgo.Message, error)
 	ReplyTTS(string) (*discordgo.Message, error)
+
+	PurgeMessages(int) error
 }
 
 type ModuleContext interface {

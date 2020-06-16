@@ -1,6 +1,8 @@
 package main
 
-import "github.com/GreatGodApollo/GoModz/pkg/api"
+import (
+	"github.com/GreatGodApollo/GoModz/pkg/api"
+)
 
 // Single command
 type exampleCmd struct{}
@@ -24,7 +26,7 @@ func (e exampleCmd) Meta() *api.CommandMeta {
 
 // Called when the bot gets the command
 func (e exampleCmd) Exec(ctx api.CommandContext, args []string) error {
-	ctx.Reply("Example!!")
+	ctx.Reply("This is just an example...")
 	return nil
 }
 

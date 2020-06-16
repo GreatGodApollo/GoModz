@@ -7,21 +7,21 @@ import (
 )
 
 type ModzBot struct {
-	Session *discordgo.Session
-	Config Configuration
-	Prefixes []string
-	Owners []string
-	Logger api.Log
-	Modules []api.Mod
-	Commands *[]*api.Command
-	IgnoreBots bool
+	Session     *discordgo.Session
+	config      Configuration
+	Prefixes    []string
+	Owners      []string
+	Logger      api.Log
+	Modules     []api.Mod
+	Commands    *[]*api.Command
+	IgnoreBots  bool
 	OnErrorFunc ModzBotOnErrorFunc
 }
 
 func NewModzBot(session *discordgo.Session, c Configuration, log api.Log, ignoreBots bool, errorFunc ModzBotOnErrorFunc) ModzBot {
 	return ModzBot{
 		Session: session,
-		Config: c,
+		config: c,
 		Prefixes: c.Prefixes,
 		Owners: c.Owners,
 		Logger: log,

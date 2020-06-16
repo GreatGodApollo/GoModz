@@ -1,6 +1,7 @@
 package app
 
 import (
+	"errors"
 	"github.com/GreatGodApollo/GoModz/pkg/api"
 	"github.com/bwmarrin/discordgo"
 	"io"
@@ -48,6 +49,26 @@ func (c CommandContext) ReplyFile(filename string, file io.Reader) (*discordgo.M
 
 func (c CommandContext) ReplyTTS(message string) (*discordgo.Message, error) {
 	return c.client.GetSession().ChannelMessageSendTTS(c.channel.ID, message)
+}
+
+// PurgeMessages purges 'x' number of messages from the Channel a CommandContext was initiated for.
+func (c CommandContext) PurgeMessages(num int) error {
+	if num >= 1 && num <= 100 {
+		msgs, err := c.Client().GetSession().ChannelMessages(c.Channel().ID, num, "", "", "")
+		if err != nil {
+			return err
+		}
+		var ids []string
+		for _, msg := range msgs {
+			ids = append(ids, msg.ID)
+		}
+		return c.Client().GetSession().ChannelMessagesBulkDelete(c.Channel().ID, ids)
+	} else if num > 1 && num > 100 {
+		return errors.New("too many messages")
+	} else if num == 0 {
+		return errors.New("must supply a number")
+	}
+	return nil
 }
 
 func (m ModuleContext) Client() api.ClientWrapper {
