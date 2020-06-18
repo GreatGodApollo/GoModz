@@ -12,7 +12,7 @@ type ModzBot struct {
 	Prefixes    []string
 	Owners      []string
 	Logger      api.Log
-	Modules     []api.Mod
+	Modules     *[]*api.Mod
 	Commands    *[]*api.Command
 	IgnoreBots  bool
 	OnErrorFunc ModzBotOnErrorFunc
@@ -27,6 +27,7 @@ func NewModzBot(session *discordgo.Session, c Configuration, log api.Log, ignore
 		Logger: log,
 		IgnoreBots: ignoreBots,
 		OnErrorFunc: errorFunc,
+		Modules:  &[]*api.Mod{},
 		Commands: &[]*api.Command{},
 	}
 }

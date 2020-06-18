@@ -63,6 +63,7 @@ type ClientWrapper interface {
 	GetPrefixes() []string
 
 	RegisterModule(Mod) error
+	Modz() *[]*Mod
 
 	RegisterCommand(Command)
 	GetCommand(string) (cmd Command, exists bool, index int)
@@ -108,16 +109,26 @@ type CommandMeta struct {
 	Type CommandType
 }
 
+type EventMeta struct {
+	Name string
+	Description string
+}
+
 type ModuleMeta struct {
 	Name string
 	Description string
 	Commands []Command
-	// Events []Event
+	Events []*Event
 }
 
 type Command interface {
 	Meta() *CommandMeta
 	Exec(context CommandContext, args []string) error
+}
+
+type Event struct {
+	Meta *EventMeta
+	Exec interface{}
 }
 
 type Mod interface {

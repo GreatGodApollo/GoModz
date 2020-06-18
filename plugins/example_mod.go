@@ -1,14 +1,16 @@
 package main
 
 import (
+	"github.com/GreatGodApollo/GoModz/internal/app"
 	"github.com/GreatGodApollo/GoModz/pkg/api"
+	"github.com/bwmarrin/discordgo"
+	"strings"
 )
 
 // Single command
 type exampleCmd struct{}
 
-// Whole module
-type exampleMod struct{}
+
 
 // Command metadata
 func (e exampleCmd) Meta() *api.CommandMeta {
@@ -30,6 +32,22 @@ func (e exampleCmd) Exec(ctx api.CommandContext, args []string) error {
 	return nil
 }
 
+// Single Event
+var exampleEvt = &api.Event{
+	Meta: &api.EventMeta{
+		Name:        "ExampleEvent",
+		Description: "An example event..",
+	},
+	Exec: func(session *discordgo.Session, event *discordgo.MessageCreate) {
+		if !event.Author.Bot && strings.Contains(event.Content, "rip") {
+			session.MessageReactionAdd(event.ChannelID, event.Message.ID, app.RegionalF)
+		}
+	},
+}
+
+// Whole module
+type exampleMod struct{}
+
 func (t *exampleMod) Init(ctx api.ModuleContext) error {
 	ctx.Logger().Info("Example mod init call")
 	return nil
@@ -46,6 +64,9 @@ func (t *exampleMod) Meta() *api.ModuleMeta {
 		Description: "An example module.",
 		Commands: []api.Command{
 			exampleCmd{},
+		},
+		Events: []*api.Event{
+			exampleEvt,
 		},
 	}
 }

@@ -28,7 +28,7 @@ func Run() {
 	if err != nil {
 		Log.Fatalf("Failed to load modules: %s", err.Error())
 	}
-	Log.Infof("Loaded %d module(s)", len(mb.Modules))
+	Log.Infof("Loaded %d module(s)", len(*mb.Modules))
 
 	client.AddHandler(mb.HandleCommand)
 	err = client.Open()

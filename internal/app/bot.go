@@ -248,10 +248,11 @@ func (mb *ModzBot) UnloadModules() {
 		client: mb,
 		log: mb.GetLogger(),
 	}
-	for _, mod := range mb.Modules {
-		err := mod.DeInit(mdCtx)
+	for _, mod := range *mb.Modules {
+		m := *mod
+		err := m.DeInit(mdCtx)
 		if err != nil {
-			mb.GetLogger().Errorf("Failed to unload %s module safely: %s", mod.Meta().Name, err.Error())
+			mb.GetLogger().Errorf("Failed to unload %s module safely: %s", m.Meta().Name, err.Error())
 		}
 	}
 }
@@ -303,11 +304,22 @@ func (mb *ModzBot) RegisterModule(mod api.Mod) error {
 		return err
 	}
 
-	mb.Modules = append(mb.Modules, mod)
+	*mb.Modules = append(*mb.Modules, &mod)
 
 	for _, cmd := range mod.Meta().Commands {
 		mb.RegisterCommand(cmd)
 	}
 
+	for _, evt := range mod.Meta().Events {
+		mb.GetLogger().Debugf("Initializing Event: %s", evt.Meta.Name)
+		if cb := mb.Session.AddHandler(evt.Exec); cb == nil {
+			mb.GetLogger().Errorf("Event '%s' was unable to be initialized.", evt.Meta.Name)
+		}
+	}
+
 	return nil
+}
+
+func (mb *ModzBot) Modz() *[]*api.Mod {
+	return mb.Modules
 }
